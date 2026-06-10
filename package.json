@@ -1,0 +1,45 @@
+{
+  "name": "ibrahimrafi.me",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Personal website of Ibrahim Rafi",
+  "type": "module",
+  "author": "Ibrahim Rafi <me@ibrahimrafi.me> (https://ibrahimrafi.me)",
+  "license": "MIT",
+  "homepage": "https://ibrahimrafi.me",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rafiibrahim8/ibrahimrafi.me.git"
+  },
+  "bugs": {
+    "url": "https://github.com/rafiibrahim8/ibrahimrafi.me/issues"
+  },
+  "engines": {
+    "node": ">=22",
+    "pnpm": ">=10"
+  },
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro check && astro build",
+    "preview": "astro preview",
+    "astro": "astro",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "check": "astro check"
+  },
+  "dependencies": {
+    "@astrojs/check": "^0.9.9",
+    "@astrojs/rss": "^4.0.18",
+    "@astrojs/sitemap": "^3.7.3",
+    "@fontsource/anton": "^5.2.7",
+    "@fontsource/ibm-plex-mono": "^5.2.7",
+    "@fontsource/ibm-plex-sans": "^5.2.8",
+    "astro": "^6.4.5",
+    "typescript": "^6.0.3"
+  },
+  "devDependencies": {
+    "prettier": "^3.8.4",
+    "prettier-plugin-astro": "^0.14.1"
+  }
+}

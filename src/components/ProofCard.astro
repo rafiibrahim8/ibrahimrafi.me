@@ -1,0 +1,43 @@
+---
+interface Props {
+  label: string;
+  title: string;
+  href?: string;
+}
+
+const { label, title, href } = Astro.props;
+---
+
+<div class="card proof">
+  <div class="label">{label}</div>
+  <h3>
+    {href ? <a href={href}>{title}</a> : title}
+  </h3>
+  <p><slot /></p>
+</div>
+
+<style>
+  .proof h3 {
+    font-size: 19px;
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+
+  .proof h3 a {
+    color: var(--ink);
+    text-decoration: none;
+  }
+
+  .proof h3 a:hover {
+    color: var(--accent);
+  }
+
+  .proof .label {
+    margin-bottom: 12px;
+  }
+
+  .proof p {
+    font-size: 14.5px;
+    color: var(--sub);
+  }
+</style>

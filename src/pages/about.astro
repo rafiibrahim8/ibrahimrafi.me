@@ -1,0 +1,88 @@
+---
+import Base from '../layouts/Base.astro';
+---
+
+<Base
+  title="About"
+  description="About Ibrahim Rafi — software engineer in Dhaka, Bangladesh. Arch Linux user, self-hoster, security-minded builder."
+>
+  <h1 class="page-title">About</h1>
+
+  <div class="bio">
+    <p>
+      I'm Ibrahim — a software engineer in Dhaka, Bangladesh. I studied
+      electronics and communication engineering at Khulna University, drifted
+      from circuits to code, and never looked back.
+    </p>
+    <p>
+      I run Arch Linux (yes, by the way). I self-host things that absolutely do
+      not need self-hosting — a music player, a package mirror, file servers —
+      because owning your own infrastructure is its own reward. When something
+      is closed, locked, or "not supported on your device", that's usually where
+      my next project comes from.
+    </p>
+    <p>
+      What I keep coming back to is what's beneath the surface — how things
+      really work, where the trust assumptions are, what happens when you poke
+      at them. It started with small
+      <a href="/steg">steganography experiments</a> in university and turned into
+      a security-minded way of building software.
+    </p>
+  </div>
+
+  <div class="contact">
+    <h2 class="label">Find me</h2>
+    <ul>
+      <li><a href="mailto:me@ibrahimrafi.me">me@ibrahimrafi.me</a></li>
+      <li>
+        <a href="https://github.com/rafiibrahim8">github.com/rafiibrahim8</a>
+      </li>
+    </ul>
+  </div>
+</Base>
+
+<style>
+  .bio {
+    max-width: 680px;
+    font-size: 17.5px;
+  }
+
+  .bio p {
+    margin-bottom: 1.2em;
+  }
+
+  .bio a {
+    color: var(--accent);
+    text-decoration: none;
+    border-bottom: 1px solid var(--accent);
+  }
+
+  .contact {
+    margin-top: 56px;
+  }
+
+  .contact h2 {
+    margin-bottom: 16px;
+  }
+
+  .contact ul {
+    list-style: none;
+    padding: 0;
+  }
+
+  .contact li {
+    margin-bottom: 8px;
+  }
+
+  .contact a {
+    font-family: var(--font-mono);
+    font-size: 15px;
+    color: var(--ink);
+    text-decoration: none;
+    border-bottom: 1px solid var(--accent);
+  }
+
+  .contact a:hover {
+    color: var(--accent);
+  }
+</style>

@@ -1,0 +1,141 @@
+:root {
+  --ink: #1d1812;
+  --paper: #fbf7f0;
+  --accent: #de5022;
+  --muted: #93897c;
+  --sub: #6e6557;
+
+  --font-display: 'Anton', 'Arial Narrow', sans-serif;
+  --font-body: 'IBM Plex Sans', system-ui, sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
+
+  --pad-x: 48px;
+  --max-w: 1100px;
+}
+
+* {
+  margin: 0;
+  box-sizing: border-box;
+}
+
+html {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-body);
+  line-height: 1.5;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+main {
+  flex: 1;
+  width: 100%;
+  max-width: var(--max-w);
+  padding: 64px var(--pad-x) 0;
+}
+
+a {
+  color: var(--accent);
+}
+
+::selection {
+  background: var(--accent);
+  color: var(--paper);
+}
+
+.display {
+  font-family: var(--font-display);
+  font-weight: 400;
+  text-transform: uppercase;
+  line-height: 0.92;
+}
+
+.outline {
+  -webkit-text-stroke: 2.5px var(--accent);
+  color: transparent;
+}
+
+.meta {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+}
+
+.meta b {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.label {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.page-title {
+  font-family: var(--font-display);
+  font-weight: 400;
+  text-transform: uppercase;
+  font-size: clamp(48px, 8vw, 96px);
+  line-height: 0.95;
+  margin-bottom: 40px;
+}
+
+.arrow-link {
+  font-family: var(--font-mono);
+  font-size: 15px;
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.arrow-link::after {
+  content: ' →';
+  color: var(--accent);
+}
+
+.arrow-link:hover {
+  color: var(--accent);
+}
+
+.card {
+  border: 2px solid var(--ink);
+  padding: 26px 24px;
+  background: var(--paper);
+  box-shadow: 5px 5px 0 var(--ink);
+  transition:
+    transform 0.12s,
+    box-shadow 0.12s;
+}
+
+.card:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 8px 8px 0 var(--accent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card,
+  .card:hover {
+    transition: none;
+    transform: none;
+  }
+}
+
+@media (max-width: 720px) {
+  :root {
+    --pad-x: 20px;
+  }
+
+  main {
+    padding-top: 40px;
+  }
+}

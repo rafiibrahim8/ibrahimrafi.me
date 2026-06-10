@@ -1,0 +1,134 @@
+<div class="prose">
+  <slot />
+</div>
+
+<style is:global>
+  .prose {
+    max-width: 720px;
+    font-size: 17px;
+  }
+
+  .prose h2,
+  .prose h3 {
+    font-family: var(--font-display);
+    font-weight: 400;
+    text-transform: uppercase;
+    line-height: 1;
+    margin: 2em 0 0.6em;
+  }
+
+  .prose h2 {
+    font-size: 32px;
+  }
+
+  .prose h3 {
+    font-size: 24px;
+  }
+
+  .prose p,
+  .prose ul,
+  .prose ol {
+    margin-bottom: 1.1em;
+  }
+
+  .prose li {
+    margin-bottom: 0.35em;
+  }
+
+  .prose a {
+    color: var(--accent);
+    text-decoration: none;
+    border-bottom: 1px solid var(--accent);
+  }
+
+  .prose code {
+    font-family: var(--font-mono);
+    font-size: 0.88em;
+    background: #f1ebe0;
+    padding: 0.15em 0.4em;
+    border: 1px solid #e4dccd;
+  }
+
+  .prose pre {
+    position: relative;
+    border: 2px solid var(--ink);
+    padding: 18px 20px;
+    overflow-x: auto;
+    margin-bottom: 1.2em;
+    box-shadow: 4px 4px 0 var(--ink);
+  }
+
+  .prose pre .copy-btn {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    padding: 0;
+    color: var(--paper);
+    background: var(--ink);
+    border: 1px solid var(--paper);
+    cursor: pointer;
+    opacity: 0;
+    transition:
+      opacity 0.12s,
+      background 0.12s,
+      border-color 0.12s;
+  }
+
+  .prose pre .copy-btn svg {
+    display: block;
+  }
+
+  .prose pre:hover .copy-btn,
+  .prose pre .copy-btn:focus-visible {
+    opacity: 1;
+  }
+
+  .prose pre .copy-btn:hover {
+    background: var(--accent);
+    border-color: var(--accent);
+  }
+
+  .prose pre .copy-btn.done {
+    background: var(--accent);
+    border-color: var(--accent);
+    opacity: 1;
+  }
+
+  /* touch devices: no hover, so keep the button visible */
+  @media (hover: none) {
+    .prose pre .copy-btn {
+      opacity: 1;
+    }
+  }
+
+  .prose pre code {
+    background: none;
+    border: none;
+    padding: 0;
+    font-size: 14px;
+  }
+
+  .prose blockquote {
+    border-left: 3px solid var(--accent);
+    padding-left: 18px;
+    color: var(--sub);
+    margin-bottom: 1.1em;
+  }
+
+  .prose img {
+    max-width: 100%;
+    border: 2px solid var(--ink);
+  }
+
+  .prose hr {
+    border: none;
+    border-top: 2px solid var(--ink);
+    margin: 2em 0;
+    width: 80px;
+  }
+</style>

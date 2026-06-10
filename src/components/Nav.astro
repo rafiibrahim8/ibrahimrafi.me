@@ -1,0 +1,84 @@
+---
+const links = [
+  { href: '/work', label: 'work' },
+  { href: '/research', label: 'research' },
+  { href: '/writing', label: 'writing' },
+  { href: '/about', label: 'about' },
+];
+const path = Astro.url.pathname;
+const isActive = (href: string) => path === href || path.startsWith(href + '/');
+---
+
+<nav>
+  <a class="logo display" href="/">Ibrahim Rafi</a>
+  <div class="links">
+    {
+      links.map((l) => (
+        <a
+          href={l.href}
+          class:list={[{ active: isActive(l.href) }]}
+          aria-current={isActive(l.href) ? 'page' : undefined}
+        >
+          {l.label}
+        </a>
+      ))
+    }
+    <a href="mailto:me@ibrahimrafi.me" class="email">me@ibrahimrafi.me</a>
+  </div>
+</nav>
+
+<style>
+  nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+    padding: 28px var(--pad-x);
+    font-family: var(--font-mono);
+    font-size: 14px;
+    border-bottom: 2px solid var(--ink);
+  }
+
+  .logo {
+    font-size: 20px;
+    letter-spacing: 0.01em;
+    color: var(--ink);
+    text-decoration: none;
+  }
+
+  .links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 28px;
+  }
+
+  .links a {
+    color: var(--ink);
+    text-decoration: none;
+  }
+
+  .links a:hover {
+    color: var(--accent);
+  }
+
+  .links a.active {
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+
+  @media (max-width: 720px) {
+    nav {
+      padding-top: 18px;
+      padding-bottom: 18px;
+    }
+
+    .links {
+      gap: 18px;
+    }
+
+    .email {
+      display: none;
+    }
+  }
+</style>

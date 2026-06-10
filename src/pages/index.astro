@@ -1,0 +1,111 @@
+---
+import Base from '../layouts/Base.astro';
+import ProofCard from '../components/ProofCard.astro';
+import { zwEncode } from '../scripts/zerowidth';
+
+const HIDDEN_MESSAGE =
+  'you found the hidden layer. email me with subject "needle" — coffee\'s on me.';
+const hidden = zwEncode(HIDDEN_MESSAGE);
+---
+
+<Base>
+  <p class="meta intro-meta">
+    Software engineer — Dhaka, Bangladesh · currently @ <b>Body Solutions, NY</b
+    >
+  </p>
+
+  <h1 class="display hero">Ibrahim<br /><span class="outline">Rafi</span></h1>
+
+  <p class="tagline" id="tagline">
+    Software engineer{hidden} building production systems in Go, Python &amp; TypeScript.
+  </p>
+  <p class="sub">
+    Security-minded, maintainer-at-heart, serial builder of small sharp tools.
+    Co-founder of <a href="https://festive.rocks">festive.rocks</a>.
+  </p>
+
+  <div class="cta">
+    <a class="arrow-link" href="/work">selected work</a>
+    <a class="arrow-link" href="/writing">read the blog</a>
+    <a class="arrow-link" href="mailto:me@ibrahimrafi.me">get in touch</a>
+  </div>
+
+  <div class="proofs">
+    <ProofCard
+      label="Open Source"
+      title="browser-cookie3"
+      href="https://github.com/borisbabic/browser_cookie3"
+    >
+      Former maintainer of a Python package pulling 1.1M+ downloads every month.
+    </ProofCard>
+    <ProofCard label="Day Job" title="Observability at scale">
+      Live JSON→relational migrations on production data, with drift recovery
+      and atomic backfill.
+    </ProofCard>
+    <ProofCard
+      label="Side Quest"
+      title="festive.rocks"
+      href="https://festive.rocks"
+    >
+      Co-founded a ticketing platform. Vue, Go, PostgreSQL, Redis — and a
+      security-first mindset.
+    </ProofCard>
+  </div>
+</Base>
+
+<script is:inline>
+  console.log(
+    '%c> hint: the tagline carries more than words. decoder at /steg',
+    'color:#DE5022;font-family:monospace;font-size:13px',
+  );
+</script>
+
+<style>
+  .intro-meta {
+    margin-bottom: 18px;
+  }
+
+  .hero {
+    font-size: clamp(76px, 13.5vw, 160px);
+    margin-bottom: 36px;
+  }
+
+  .tagline {
+    font-size: 24px;
+    font-weight: 600;
+    max-width: 640px;
+    margin-bottom: 10px;
+  }
+
+  .sub {
+    font-size: 17px;
+    color: var(--sub);
+    max-width: 600px;
+    margin-bottom: 48px;
+  }
+
+  .sub a {
+    color: var(--accent);
+    text-decoration: none;
+    border-bottom: 1px solid var(--accent);
+  }
+
+  .cta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px 32px;
+  }
+
+  .proofs {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    margin-top: 72px;
+  }
+
+  @media (max-width: 720px) {
+    .proofs {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

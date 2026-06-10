@@ -1,0 +1,117 @@
+---
+import Base from '../layouts/Base.astro';
+
+const publications = [
+  {
+    title:
+      'An Automatic Computer-Based Method for Fast and Accurate Covid-19 Diagnosis',
+    desc: 'A sequential CNN that detects COVID-19 from CT scan images with ~92.5% accuracy.',
+    doi: '10.1101/2020.07.02.20136721',
+    href: 'https://doi.org/10.1101/2020.07.02.20136721',
+  },
+  {
+    title: 'KU-HAR: An Open Dataset for Human Activity Recognition',
+    desc: '18 activities, 90 participants, smartphone accelerometer + gyroscope. 1,945 raw samples and 20,750 subsamples.',
+    doi: '10.17632/45f952y38r.5',
+    href: 'https://doi.org/10.17632/45f952y38r.5',
+  },
+  {
+    title: 'KU-BdSL: Khulna University Bengali Sign Language dataset',
+    desc: '1,500 images covering the 39 consonants of the Bengali alphabet, from 37 volunteers, processed for ML use.',
+    doi: '10.17632/scpvm2nbkm.1',
+    href: 'https://doi.org/10.17632/scpvm2nbkm.1',
+  },
+];
+---
+
+<Base
+  title="Research"
+  description="Thesis, publications and datasets by Ibrahim Rafi — machine learning, sign language detection, human activity recognition."
+>
+  <h1 class="page-title">Research</h1>
+
+  <section>
+    <h2 class="label section-label">Thesis</h2>
+    <article class="thesis">
+      <h3>
+        KUNet — a modified genetic-algorithm-based CNN for Bengali Sign Language
+        detection
+      </h3>
+      <p>
+        KUNet is a convolutional neural network that detects Bengali sign
+        language, with model parameters optimized by a genetic algorithm.
+        Because genetic algorithms are slow learners, we distributed the search
+        across many machines to make training tractable.
+      </p>
+    </article>
+  </section>
+
+  <section>
+    <h2 class="label section-label">Publications &amp; datasets</h2>
+    {
+      publications.map((p) => (
+        <article class="pub">
+          <h3>
+            <a href={p.href}>{p.title}</a>
+          </h3>
+          <p>{p.desc}</p>
+          <p class="meta">DOI: {p.doi}</p>
+        </article>
+      ))
+    }
+  </section>
+
+  <section>
+    <h2 class="label section-label">Education</h2>
+    <p class="edu">
+      BSc in Electronics and Communication Engineering —
+      <b>Khulna University</b>, 2017-2023.
+    </p>
+  </section>
+</Base>
+
+<style>
+  section {
+    margin-bottom: 64px;
+  }
+
+  .section-label {
+    display: block;
+    margin-bottom: 28px;
+    border-bottom: 2px solid var(--ink);
+    padding-bottom: 10px;
+  }
+
+  .thesis,
+  .pub {
+    max-width: 720px;
+    margin-bottom: 36px;
+  }
+
+  h3 {
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+
+  .pub h3 a {
+    color: var(--ink);
+    text-decoration: none;
+    border-bottom: 2px solid var(--accent);
+  }
+
+  .pub h3 a:hover {
+    color: var(--accent);
+  }
+
+  .thesis p,
+  .pub p {
+    color: var(--sub);
+    margin-bottom: 8px;
+  }
+
+  .edu {
+    color: var(--sub);
+    font-size: 17px;
+  }
+</style>

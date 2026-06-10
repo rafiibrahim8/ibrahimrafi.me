@@ -1,0 +1,33 @@
+---
+import Base from '../layouts/Base.astro';
+---
+
+<Base title="404">
+  <p class="meta">HTTP 404 — not found</p>
+  <h1 class="display big">Lost<br /><span class="outline">?</span></h1>
+  <p class="sub">
+    This page doesn't exist. Or maybe it's just <a href="/steg"
+      >very well hidden</a
+    >.
+  </p>
+  <a class="arrow-link" href="/">back home</a>
+</Base>
+
+<style>
+  .big {
+    font-size: clamp(76px, 13.5vw, 160px);
+    margin: 18px 0 28px;
+  }
+
+  .sub {
+    font-size: 17px;
+    color: var(--sub);
+    margin-bottom: 36px;
+  }
+
+  .sub a {
+    color: var(--accent);
+    text-decoration: none;
+    border-bottom: 1px solid var(--accent);
+  }
+</style>

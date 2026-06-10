@@ -1,0 +1,324 @@
+---
+import Base from '../layouts/Base.astro';
+
+const jobs = [
+  {
+    org: 'Body Solutions',
+    role: 'Software Engineer',
+    where: 'NY, US — remote',
+    when: 'Sep 2025 — present',
+    stack: 'Go · Python · TypeScript · PostgreSQL',
+    story:
+      'I led architecture for the Assessment Monitoring observability stack — a state-machine model over raw lifecycle data, a polling-friendly query layer, and structured error capture surfaced through a single dashboard used by engineering and clinical staff. I designed and ran live schema migrations on production data, including a JSON→relational conversion with drift recovery and atomic backfill. The backend orchestration patterns I shaped around an external AI service — transactional guarantees, idempotency, lossless persistence — became long-term conventions for the team.',
+  },
+  {
+    org: 'fringecore (CityGroup)',
+    role: 'Software Engineer',
+    where: 'Dhaka, BD',
+    when: 'Sep 2023 — Sep 2025',
+    stack: 'Go · Python · Kafka · KVM · FaceNet · IoT',
+    story:
+      "I built a low-resolution face recognition system (FaceNet + KNN) for analyzing CCTV footage, and a Kafka + Go service that reliably handles thousands of ad display events. I developed a computer-vision system for tracking cylinders in industrial operations, and worked with IoT devices across the floor. One job I'm fond of: rescuing a hospital's dying nurse-call server by virtualizing a decade-old physical appliance — including reverse-engineering a Java license check that tied the software to the motherboard's hardware UUID, and shimming dmidecode so the VM could inherit the original machine's identity.",
+    readMore: {
+      href: '/writing/the-license-was-tied-to-the-motherboard',
+      label: 'read the rescue story',
+    },
+  },
+  {
+    org: 'Festive.Rocks',
+    role: 'Co-founder',
+    where: 'side project',
+    when: 'Mar 2023 — present',
+    stack: 'Vue · Go · PostgreSQL · Redis',
+    link: 'https://festive.rocks',
+    story:
+      'Co-founded a ticketing platform and built it across the stack: authentication, verification, and password-reset flows, with performance work that minimizes database round-trips — and a habit of attacking our own site before anyone else does.',
+  },
+  {
+    org: 'Algorizin',
+    role: 'Backend Developer',
+    where: 'NY, US — remote',
+    when: 'Jun 2022 — Aug 2023',
+    stack: 'Next.js · TypeORM · PostgreSQL · Amazon SES',
+    story:
+      'Built and maintained the backend for a platform supporting international students in the US, set up the CI/CD pipeline that sped up deployments, and mentored junior developers.',
+  },
+];
+
+const projects = [
+  {
+    name: 'spindle',
+    desc: 'A self-hosted, full-stack music player.',
+    stack: 'TypeScript',
+    link: 'https://github.com/rafiibrahim8/spindle',
+  },
+  {
+    name: 'pacano',
+    desc: 'Selective Arch Linux mirror — mirrors only the packages you actually use, saving storage and bandwidth.',
+    stack: 'TypeScript · Python',
+    link: 'https://github.com/rafiibrahim8/pacano',
+  },
+  {
+    name: 'ssh-endswith',
+    desc: 'Generates Ed25519 SSH keys whose public key ends with a chosen suffix. Vanity cryptography.',
+    stack: 'Go',
+    link: 'https://github.com/rafiibrahim8/ssh-endswith',
+  },
+  {
+    name: 'geckodriver-unchained',
+    desc: 'Unrestricted geckodriver that drives LibreWolf, Waterfox, Mullvad Browser and other Firefox forks.',
+    stack: 'Makefile · CI',
+    link: 'https://github.com/rafiibrahim8/geckodriver-unchained',
+  },
+  {
+    name: 'ununsend',
+    desc: 'See the messages people unsent on Messenger.',
+    stack: 'Python',
+    link: 'https://github.com/rafiibrahim8/ununsend',
+  },
+  {
+    name: 'VerilogX',
+    desc: 'A GUI for iverilog that made university Verilog simulation bearable.',
+    stack: 'Java · Bash',
+    link: 'https://github.com/rafiibrahim8',
+  },
+  {
+    name: 'repo-t',
+    desc: 'AUR package auto-builder on GitHub Actions — consistent, reliable, hands-off.',
+    stack: 'Python · CI/CD',
+    link: 'https://github.com/rafiibrahim8/repo-t',
+  },
+  {
+    name: 'Vault-Blaster',
+    desc: "Broke a popular Android vault app's weak encryption; automated extraction with magic-number file-type detection.",
+    stack: 'C · Java · Android',
+    link: 'https://github.com/rafiibrahim8',
+  },
+];
+
+const tools = [
+  {
+    name: 'not-jwt',
+    desc: 'tiny cross-runtime token signer',
+    link: 'https://github.com/rafiibrahim8/not-jwt',
+  },
+  {
+    name: 'truewho',
+    desc: 'Truecaller lookups from the CLI',
+    link: 'https://github.com/rafiibrahim8/truewho',
+  },
+  {
+    name: 'android-wifi-fileserver',
+    desc: 'share phone files over local Wi-Fi',
+    link: 'https://github.com/rafiibrahim8/android-wifi-fileserver',
+  },
+  {
+    name: 'sms-forwarding-relay',
+    desc: 'SMS → anywhere relay',
+    link: 'https://github.com/rafiibrahim8/sms-forwarding-relay',
+  },
+  {
+    name: 'gddl',
+    desc: 'Google Drive downloads with resume',
+    link: 'https://github.com/rafiibrahim8/gddl',
+  },
+  {
+    name: 'hs',
+    desc: 'feature-rich static HTTP server',
+    link: 'https://github.com/rafiibrahim8/hs',
+  },
+];
+---
+
+<Base
+  title="Work"
+  description="Professional experience and selected projects of Ibrahim Rafi — backend systems, open source, and small sharp tools."
+>
+  <h1 class="page-title">Work</h1>
+
+  <section>
+    <h2 class="label section-label">Professional</h2>
+    {
+      jobs.map((j) => (
+        <article class="job">
+          <div class="job-head">
+            <h3>
+              {j.link ? <a href={j.link}>{j.org}</a> : j.org}
+              <span class="role"> — {j.role}</span>
+            </h3>
+            <p class="meta">
+              {j.when} · {j.where}
+            </p>
+          </div>
+          <p class="story">{j.story}</p>
+          {j.readMore && (
+            <p class="read-more">
+              <a class="arrow-link" href={j.readMore.href}>
+                {j.readMore.label}
+              </a>
+            </p>
+          )}
+          <p class="meta stack">{j.stack}</p>
+        </article>
+      ))
+    }
+  </section>
+
+  <section>
+    <h2 class="label section-label">Projects</h2>
+    <div class="grid">
+      {
+        projects.map((p) => (
+          <a class="card project" href={p.link}>
+            <h3>{p.name}</h3>
+            <p>{p.desc}</p>
+            <p class="meta">{p.stack}</p>
+          </a>
+        ))
+      }
+    </div>
+  </section>
+
+  <section>
+    <h2 class="label section-label">Early work</h2>
+    <p class="early">
+      Some early university projects:
+      <a href="https://github.com/rafiibrahim8/isteg">iSteg</a> hid text inside images
+      with least-significant-bit encoding, and
+      <a href="https://github.com/rafiibrahim8/asteg">aSteg</a> hid files inside audio
+      using on-off keying. They're still around — <a href="/steg"
+        >try the browser version</a
+      >.
+    </p>
+  </section>
+
+  <section>
+    <h2 class="label section-label">Small tools</h2>
+    <ul class="tools">
+      {
+        tools.map((t) => (
+          <li>
+            <a href={t.link}>{t.name}</a>
+            <span class="meta"> — {t.desc}</span>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+</Base>
+
+<style>
+  section {
+    margin-bottom: 72px;
+  }
+
+  .section-label {
+    display: block;
+    margin-bottom: 28px;
+    border-bottom: 2px solid var(--ink);
+    padding-bottom: 10px;
+  }
+
+  .job {
+    max-width: 760px;
+    margin-bottom: 44px;
+  }
+
+  .job h3 {
+    font-size: 21px;
+    font-weight: 600;
+  }
+
+  .job h3 a {
+    color: var(--ink);
+    text-decoration: none;
+    border-bottom: 2px solid var(--accent);
+  }
+
+  .job .role {
+    font-weight: 400;
+    color: var(--sub);
+  }
+
+  .job-head {
+    margin-bottom: 10px;
+  }
+
+  .story {
+    color: var(--sub);
+    margin-bottom: 10px;
+  }
+
+  .read-more {
+    margin-bottom: 10px;
+  }
+
+  .stack {
+    letter-spacing: 0.04em;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 24px;
+  }
+
+  .project {
+    display: block;
+    color: var(--ink);
+    text-decoration: none;
+  }
+
+  .project h3 {
+    font-family: var(--font-mono);
+    font-size: 17px;
+    margin-bottom: 8px;
+  }
+
+  .project:hover h3 {
+    color: var(--accent);
+  }
+
+  .project p {
+    font-size: 14.5px;
+    color: var(--sub);
+    margin-bottom: 10px;
+  }
+
+  .project .meta {
+    font-size: 12px;
+    margin: 0;
+  }
+
+  .early {
+    max-width: 680px;
+    color: var(--sub);
+  }
+
+  .early a {
+    color: var(--accent);
+    text-decoration: none;
+    border-bottom: 1px solid var(--accent);
+  }
+
+  .tools {
+    list-style: none;
+    padding: 0;
+  }
+
+  .tools li {
+    margin-bottom: 10px;
+  }
+
+  .tools a {
+    font-family: var(--font-mono);
+    font-size: 15px;
+    color: var(--ink);
+    text-decoration: none;
+    border-bottom: 1px solid var(--accent);
+  }
+
+  .tools a:hover {
+    color: var(--accent);
+  }
+</style>

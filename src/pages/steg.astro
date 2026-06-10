@@ -1,0 +1,433 @@
+---
+import Base from '../layouts/Base.astro';
+---
+
+<Base
+  title="Steg"
+  description="Hide text inside images — or reveal what's hidden. Browser-side steganography by Ibrahim Rafi."
+>
+  <h1 class="page-title">The hidden<br />layer</h1>
+
+  <p class="lede">
+    My first projects were steganography tools — <a
+      href="https://github.com/rafiibrahim8/isteg">iSteg</a
+    > hid text inside images, <a href="https://github.com/rafiibrahim8/asteg"
+      >aSteg</a
+    > hid files inside audio. This page is their browser-native descendant. Everything
+    runs locally —
+    <b>nothing you put here leaves your machine.</b>
+  </p>
+
+  <section class="card panel">
+    <h2 class="label">01 — Hide text in an image</h2>
+    <div class="row">
+      <label class="dropzone" for="hide-file" data-dropzone>
+        <input type="file" id="hide-file" accept="image/*" />
+        <svg class="dz-icon" viewBox="0 0 24 24" aria-hidden="true">
+          <path
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M12 16V4m0 0L7 9m5-5 5 5M4 17v2a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-2"
+          ></path>
+        </svg>
+        <span class="dz-text"><b>Choose an image</b> or drop it here</span>
+        <span class="dz-file" data-filename></span>
+      </label>
+      <textarea id="hide-msg" rows="4" placeholder="your secret message…"
+      ></textarea>
+      <button id="hide-btn" disabled>encode → download PNG</button>
+      <p class="status" id="hide-status"></p>
+    </div>
+  </section>
+
+  <section class="card panel">
+    <h2 class="label">02 — Reveal text from an image</h2>
+    <div class="row">
+      <label class="dropzone" for="reveal-file" data-dropzone>
+        <input type="file" id="reveal-file" accept="image/*" />
+        <svg class="dz-icon" viewBox="0 0 24 24" aria-hidden="true">
+          <path
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M12 16V4m0 0L7 9m5-5 5 5M4 17v2a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-2"
+          ></path>
+        </svg>
+        <span class="dz-text"><b>Choose an image</b> or drop it here</span>
+        <span class="dz-file" data-filename></span>
+      </label>
+      <button id="reveal-btn" disabled>decode</button>
+      <pre class="output" id="reveal-out" hidden></pre>
+      <p class="status" id="reveal-status"></p>
+    </div>
+  </section>
+
+  <section class="card panel">
+    <h2 class="label">03 — Decode hidden text from… text</h2>
+    <p class="hint-line">
+      Some text carries invisible zero-width characters between its letters.
+      Paste a suspicious sentence here. <span class="nudge"
+        >The homepage might be a good place to start.</span
+      >
+    </p>
+    <div class="row">
+      <textarea
+        id="zw-in"
+        rows="3"
+        placeholder="paste text that might be hiding something…"></textarea>
+      <button id="zw-btn">decode</button>
+      <pre class="output" id="zw-out" hidden></pre>
+      <p class="status" id="zw-status"></p>
+    </div>
+  </section>
+
+  <p class="how">
+    How it works: images use least-significant-bit encoding across RGB channels;
+    text uses U+200B/U+200C zero-width characters as binary. Read the
+    <a href="/writing/hiding-a-sentence-in-plain-sight">write-up</a>.
+  </p>
+</Base>
+
+<script>
+  import { encode, decode } from '../scripts/steg';
+  import { zwDecode } from '../scripts/zerowidth';
+
+  const $ = <T extends HTMLElement>(id: string) =>
+    document.getElementById(id) as T;
+
+  // Wire a styled dropzone: drag-and-drop highlight + filename readout, then run onPick.
+  function setupDropzone(input: HTMLInputElement, onPick: () => void) {
+    const zone = input.closest<HTMLLabelElement>('[data-dropzone]')!;
+    const nameEl = zone.querySelector<HTMLElement>('[data-filename]')!;
+
+    const reflect = () => {
+      const file = input.files?.[0];
+      nameEl.textContent = file ? file.name : '';
+      zone.classList.toggle('has-file', !!file);
+      onPick();
+    };
+
+    input.addEventListener('change', reflect);
+
+    ['dragenter', 'dragover'].forEach((evt) =>
+      zone.addEventListener(evt, (e) => {
+        e.preventDefault();
+        zone.classList.add('dragging');
+      }),
+    );
+    ['dragleave', 'dragend'].forEach((evt) =>
+      zone.addEventListener(evt, () => zone.classList.remove('dragging')),
+    );
+    zone.addEventListener('drop', (e) => {
+      e.preventDefault();
+      zone.classList.remove('dragging');
+      const dropped = (e as DragEvent).dataTransfer?.files;
+      if (dropped && dropped.length) {
+        input.files = dropped;
+        reflect();
+      }
+    });
+  }
+
+  function loadImage(file: File): Promise<ImageData> {
+    return new Promise((resolve, reject) => {
+      const url = URL.createObjectURL(file);
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        canvas.width = img.naturalWidth;
+        canvas.height = img.naturalHeight;
+        const ctx = canvas.getContext('2d')!;
+        ctx.drawImage(img, 0, 0);
+        URL.revokeObjectURL(url);
+        resolve(ctx.getImageData(0, 0, canvas.width, canvas.height));
+      };
+      img.onerror = () =>
+        reject(new Error('Could not load that file as an image.'));
+      img.src = url;
+    });
+  }
+
+  function imageDataToPngUrl(image: ImageData): Promise<string> {
+    const canvas = document.createElement('canvas');
+    canvas.width = image.width;
+    canvas.height = image.height;
+    canvas.getContext('2d')!.putImageData(image, 0, 0);
+    return new Promise((resolve, reject) =>
+      canvas.toBlob(
+        (blob) =>
+          blob
+            ? resolve(URL.createObjectURL(blob))
+            : reject(new Error('PNG export failed.')),
+        'image/png',
+      ),
+    );
+  }
+
+  // --- 01: hide ---
+  const hideFile = $<HTMLInputElement>('hide-file');
+  const hideMsg = $<HTMLTextAreaElement>('hide-msg');
+  const hideBtn = $<HTMLButtonElement>('hide-btn');
+  const hideStatus = $('hide-status');
+
+  const syncHide = () => {
+    hideBtn.disabled = !(hideFile.files?.length && hideMsg.value.length);
+  };
+  setupDropzone(hideFile, syncHide);
+  hideMsg.addEventListener('input', syncHide);
+
+  hideBtn.addEventListener('click', async () => {
+    hideStatus.textContent = 'encoding…';
+    try {
+      const image = await loadImage(hideFile.files![0]!);
+      encode(image, hideMsg.value);
+      const url = await imageDataToPngUrl(image);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'hidden.png';
+      a.click();
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+      hideStatus.textContent = 'done — message embedded. PNG downloaded.';
+    } catch (e) {
+      hideStatus.textContent = (e as Error).message;
+    }
+  });
+
+  // --- 02: reveal ---
+  const revealFile = $<HTMLInputElement>('reveal-file');
+  const revealBtn = $<HTMLButtonElement>('reveal-btn');
+  const revealOut = $<HTMLPreElement>('reveal-out');
+  const revealStatus = $('reveal-status');
+
+  setupDropzone(revealFile, () => {
+    revealBtn.disabled = !revealFile.files?.length;
+  });
+
+  revealBtn.addEventListener('click', async () => {
+    revealStatus.textContent = 'decoding…';
+    revealOut.hidden = true;
+    try {
+      const image = await loadImage(revealFile.files![0]!);
+      const message = decode(image);
+      if (message === null) {
+        revealStatus.textContent =
+          'no hidden message found (or it was not encoded with this tool — JPEG re-compression destroys the bits).';
+      } else {
+        revealOut.textContent = message;
+        revealOut.hidden = false;
+        revealStatus.textContent = '';
+      }
+    } catch (e) {
+      revealStatus.textContent = (e as Error).message;
+    }
+  });
+
+  // --- 03: zero-width ---
+  const zwIn = $<HTMLTextAreaElement>('zw-in');
+  const zwBtn = $<HTMLButtonElement>('zw-btn');
+  const zwOut = $<HTMLPreElement>('zw-out');
+  const zwStatus = $('zw-status');
+
+  zwBtn.addEventListener('click', () => {
+    const message = zwDecode(zwIn.value);
+    if (message.length) {
+      zwOut.textContent = message;
+      zwOut.hidden = false;
+      zwStatus.textContent = '';
+    } else {
+      zwOut.hidden = true;
+      zwStatus.textContent = 'nothing hidden in that text — keep looking.';
+    }
+  });
+</script>
+
+<style>
+  .lede {
+    max-width: 660px;
+    font-size: 17.5px;
+    color: var(--sub);
+    margin-bottom: 48px;
+  }
+
+  .lede a {
+    color: var(--accent);
+    text-decoration: none;
+    border-bottom: 1px solid var(--accent);
+  }
+
+  .lede b {
+    color: var(--ink);
+  }
+
+  .panel {
+    max-width: 660px;
+    margin-bottom: 36px;
+  }
+
+  .panel h2 {
+    margin-bottom: 18px;
+  }
+
+  .row {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    align-items: flex-start;
+  }
+
+  .hint-line {
+    font-size: 14.5px;
+    color: var(--sub);
+    margin-bottom: 14px;
+  }
+
+  .nudge {
+    color: var(--accent);
+  }
+
+  .dropzone {
+    position: relative;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 26px 20px;
+    border: 2px dashed var(--ink);
+    background: #f5efe3;
+    cursor: pointer;
+    text-align: center;
+    transition:
+      border-color 0.12s,
+      background 0.12s,
+      color 0.12s;
+  }
+
+  .dropzone input[type='file'] {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .dz-icon {
+    width: 26px;
+    height: 26px;
+    color: var(--ink);
+  }
+
+  .dz-text {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: var(--sub);
+  }
+
+  .dz-text b {
+    color: var(--ink);
+    font-weight: 600;
+    border-bottom: 2px solid var(--accent);
+  }
+
+  .dz-file {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--accent);
+    word-break: break-all;
+  }
+
+  .dropzone:hover,
+  .dropzone:focus-within {
+    border-color: var(--accent);
+    background: #f0e7d6;
+  }
+
+  /* drag-over + has-file states toggled from the script */
+  .dropzone.dragging {
+    border-color: var(--accent);
+    border-style: solid;
+    background: #f0e7d6;
+    color: var(--accent);
+  }
+
+  .dropzone.has-file {
+    border-style: solid;
+    border-color: var(--accent);
+  }
+
+  textarea {
+    width: 100%;
+    font-family: var(--font-mono);
+    font-size: 14px;
+    padding: 12px;
+    border: 2px solid var(--ink);
+    background: var(--paper);
+    color: var(--ink);
+    resize: vertical;
+  }
+
+  textarea:focus {
+    outline: 2px solid var(--accent);
+    outline-offset: -2px;
+  }
+
+  button {
+    font-family: var(--font-mono);
+    font-size: 14px;
+    padding: 10px 20px;
+    border: 2px solid var(--ink);
+    background: var(--ink);
+    color: var(--paper);
+    cursor: pointer;
+    box-shadow: 3px 3px 0 var(--accent);
+  }
+
+  button:hover:not(:disabled) {
+    background: var(--accent);
+    border-color: var(--accent);
+    box-shadow: 3px 3px 0 var(--ink);
+  }
+
+  button:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    box-shadow: none;
+  }
+
+  .output {
+    width: 100%;
+    border: 2px solid var(--accent);
+    padding: 14px;
+    font-family: var(--font-mono);
+    font-size: 14px;
+    white-space: pre-wrap;
+    word-break: break-word;
+    background: #f5efe3;
+  }
+
+  .status {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: var(--sub);
+    min-height: 1.2em;
+  }
+
+  .how {
+    max-width: 660px;
+    font-size: 14.5px;
+    color: var(--muted);
+    margin-top: 48px;
+  }
+
+  .how a {
+    color: var(--accent);
+    text-decoration: none;
+    border-bottom: 1px solid var(--accent);
+  }
+</style>
