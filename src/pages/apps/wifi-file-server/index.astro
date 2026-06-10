@@ -1,0 +1,370 @@
+---
+import Base from '../../../layouts/Base.astro';
+
+const github = 'https://github.com/rafiibrahim8/android-wifi-fileserver';
+const playStore =
+  'https://play.google.com/store/apps/details?id=me.ibrahimrafi.wififileserver';
+
+const steps = [
+  {
+    title: 'Pick a folder',
+    desc: 'Choose any folder on your device. Only that folder is exposed.',
+  },
+  {
+    title: 'Tap Start',
+    desc: 'A QR code and local URL appear on the home screen.',
+  },
+  {
+    title: 'Scan or open',
+    desc: 'Any phone, tablet, or laptop on the same Wi-Fi opens the URL.',
+  },
+  {
+    title: 'Browse & download',
+    desc: "It looks like a normal file listing in your browser. Stop the server when you're done.",
+  },
+];
+
+const features = [
+  {
+    title: 'Any browser, any device',
+    desc: 'No app install on the receiving side. Works on phones, laptops, tablets, smart TVs — anything that opens a URL.',
+  },
+  {
+    title: 'QR code on the home screen',
+    desc: 'Connect another device by pointing its camera at the phone. No typing IPs.',
+  },
+  {
+    title: 'Resumable downloads',
+    desc: 'HTTP range requests are supported, so paused or interrupted downloads pick up where they left off.',
+  },
+  {
+    title: 'Folder upload',
+    desc: 'Pick a whole folder tree from a computer; the structure is preserved on the phone.',
+  },
+  {
+    title: 'Multi-select',
+    desc: 'Pick several files at once, then bulk-download as a ZIP or bulk-delete.',
+  },
+  {
+    title: 'Optional password',
+    desc: 'Basic auth available when you want a quick gate between you and the rest of the network.',
+  },
+  {
+    title: 'Auto-stop on idle',
+    desc: 'Set the server to shut itself off after a configurable idle window. Forget to stop it; the app remembers for you.',
+  },
+  {
+    title: 'Drop-box mode',
+    desc: 'Hide the file listing entirely and accept only uploads — useful when others need to drop files to you.',
+  },
+  {
+    title: 'Home-screen widget',
+    desc: 'Start or stop the server with a single tap, without opening the app.',
+  },
+];
+---
+
+<Base
+  title="WiFi File Server"
+  description="WiFi File Server — turn your phone into a small private file server. Anyone on your Wi-Fi can browse files from a browser. No cloud, no account, no ads."
+  ogImage={{
+    src: '/images/apps/wifi-file-server-feature-graphic.png',
+    width: 1024,
+    height: 500,
+  }}
+>
+  <p class="meta intro-meta">Android app · <b>Local</b> · open source · no ads</p>
+
+  <h1 class="page-title">WiFi File<br /><span class="outline">Server</span></h1>
+
+  <p class="tagline">Share files from your phone over Wi-Fi.</p>
+  <p class="sub">
+    Turn your phone into a small private file server. Anyone on your Wi-Fi can
+    browse and download files from your phone using just a web browser. No
+    cloud, no account, no tracking.
+  </p>
+
+  <div class="cta-row">
+    <a class="btn btn-primary" href={playStore}>Google Play</a>
+    <a class="btn" href={`${github}/releases`}>Download APK</a>
+    <a class="btn" href={github}>Source on GitHub</a>
+  </div>
+
+  <p class="url-chip">http://xx.xx.xx.xx:1200</p>
+
+  <section>
+    <h2 class="label section-label">How it works</h2>
+    <p class="section-lede">
+      Four steps, no signup. No accounts to make, no apps to install on the
+      receiving device.
+    </p>
+    <div class="grid">
+      {
+        steps.map((s, i) => (
+          <div class="card step">
+            <p class="step-num">0{i + 1}</p>
+            <h3>{s.title}</h3>
+            <p>{s.desc}</p>
+          </div>
+        ))
+      }
+    </div>
+  </section>
+
+  <section>
+    <h2 class="label section-label">Features</h2>
+    <p class="section-lede">
+      Built for the LAN, not the cloud. Everything you need to move files
+      between devices on your network — and nothing you don't.
+    </p>
+    <div class="grid">
+      {
+        features.map((f) => (
+          <div class="card feature">
+            <h3>{f.title}</h3>
+            <p>{f.desc}</p>
+          </div>
+        ))
+      }
+    </div>
+  </section>
+
+  <section>
+    <h2 class="label section-label">Privacy</h2>
+    <div class="privacy">
+      <div>
+        <h3 class="display privacy-title">Your files don't go anywhere.</h3>
+        <p class="privacy-text">
+          No cloud. No account. No telemetry. The server runs on your phone and
+          serves files over your local Wi-Fi. Files never traverse the public
+          internet. The app has no analytics SDKs, no third-party services, and
+          doesn't phone home.
+        </p>
+        <p class="read-policy">
+          <a class="arrow-link" href="/apps/wifi-file-server/privacy">
+            read the full privacy policy
+          </a>
+        </p>
+      </div>
+      <ul class="privacy-points">
+        <li>All data stays on your device or your local network.</li>
+        <li>Optional credentials are stored locally only.</li>
+        <li>Transfer history persists across app restarts — on-device only.</li>
+        <li>No third-party SDKs, ads, or analytics.</li>
+        <li>
+          Source is on <a href={github}>GitHub</a> — read it yourself.
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <section>
+    <h2 class="label section-label">Get the app</h2>
+    <div class="get-card">
+      <h3 class="display get-title">Free, ad-free, source-available.</h3>
+      <p class="get-lede">
+        Coming soon to Google Play. Until then, install from source or grab a
+        debug APK from the GitHub releases page.
+      </p>
+      <div class="cta-row">
+        <a class="btn btn-primary" href={playStore}>Google Play</a>
+        <a class="btn" href={`${github}/releases`}>Download APK</a>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .intro-meta {
+    margin-bottom: 18px;
+  }
+
+  .tagline {
+    font-size: 24px;
+    font-weight: 600;
+    max-width: 640px;
+    margin-bottom: 10px;
+  }
+
+  .sub {
+    font-size: 17px;
+    color: var(--sub);
+    max-width: 600px;
+    margin-bottom: 36px;
+  }
+
+  .cta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  .btn {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: 14px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--ink);
+    text-decoration: none;
+    background: var(--paper);
+    border: 2px solid var(--ink);
+    padding: 12px 20px;
+    box-shadow: 4px 4px 0 var(--ink);
+    transition:
+      transform 0.12s,
+      box-shadow 0.12s;
+  }
+
+  .btn:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 7px 7px 0 var(--accent);
+  }
+
+  .btn-primary {
+    background: var(--accent);
+    color: var(--paper);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .btn,
+    .btn:hover {
+      transition: none;
+      transform: none;
+    }
+  }
+
+  .url-chip {
+    font-family: var(--font-mono);
+    font-size: 14px;
+    color: var(--accent);
+    margin-top: 28px;
+  }
+
+  .url-chip::before {
+    content: '$ ';
+    color: var(--muted);
+  }
+
+  section {
+    margin-top: 72px;
+  }
+
+  .section-label {
+    display: block;
+    margin-bottom: 16px;
+    border-bottom: 2px solid var(--ink);
+    padding-bottom: 10px;
+  }
+
+  .section-lede {
+    max-width: 620px;
+    color: var(--sub);
+    margin-bottom: 28px;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 24px;
+  }
+
+  .step-num {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--accent);
+    margin-bottom: 12px;
+  }
+
+  .card h3 {
+    font-family: var(--font-mono);
+    font-size: 16px;
+    margin-bottom: 8px;
+  }
+
+  .card p {
+    font-size: 14.5px;
+    color: var(--sub);
+  }
+
+  .card .step-num {
+    color: var(--accent);
+  }
+
+  .privacy {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 32px;
+    align-items: start;
+    max-width: 960px;
+  }
+
+  @media (max-width: 720px) {
+    .privacy {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .privacy-title {
+    font-size: clamp(28px, 4vw, 40px);
+    margin-bottom: 14px;
+  }
+
+  .privacy-text {
+    color: var(--sub);
+    margin-bottom: 18px;
+  }
+
+  .privacy-points {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .privacy-points li {
+    position: relative;
+    padding-left: 26px;
+    margin-bottom: 10px;
+    font-size: 15px;
+    color: var(--sub);
+  }
+
+  .privacy-points li::before {
+    content: '✓';
+    position: absolute;
+    left: 0;
+    color: var(--accent);
+    font-weight: 700;
+  }
+
+  .privacy-points a {
+    color: var(--accent);
+    text-decoration: none;
+    border-bottom: 1px solid var(--accent);
+  }
+
+  .get-card {
+    border: 2px solid var(--ink);
+    box-shadow: 6px 6px 0 var(--ink);
+    padding: 40px 32px;
+    max-width: 760px;
+  }
+
+  .get-title {
+    font-size: clamp(28px, 4vw, 40px);
+    margin-bottom: 14px;
+  }
+
+  .get-lede {
+    color: var(--sub);
+    max-width: 520px;
+    margin-bottom: 28px;
+  }
+
+  /* leave room for the footer */
+  section:last-of-type {
+    margin-bottom: 72px;
+  }
+</style>
