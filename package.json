@@ -4,6 +4,7 @@
   "private": true,
   "description": "Personal website of Ibrahim Rafi",
   "type": "module",
+  "packageManager": "pnpm@11.5.3",
   "author": "Ibrahim Rafi <me@ibrahimrafi.me> (https://ibrahimrafi.me)",
   "license": "MIT",
   "homepage": "https://ibrahimrafi.me",
