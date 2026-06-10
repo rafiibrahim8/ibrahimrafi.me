@@ -68,6 +68,13 @@ const toc = headings.filter((h) => h.depth === 2 || h.depth === 3);
     const code = pre.querySelector('code');
     if (!code) return;
 
+    // Wrap the <pre> so the copy button sits on a non-scrolling container —
+    // otherwise it scrolls away with the code on horizontal overflow.
+    const wrap = document.createElement('div');
+    wrap.className = 'code-wrap';
+    pre.replaceWith(wrap);
+    wrap.appendChild(pre);
+
     const btn = document.createElement('button');
     btn.type = 'button';
     btn.className = 'copy-btn';
@@ -92,7 +99,7 @@ const toc = headings.filter((h) => h.depth === 2 || h.depth === 3);
       }
     });
 
-    pre.appendChild(btn);
+    wrap.appendChild(btn);
   });
 </script>
 

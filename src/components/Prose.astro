@@ -49,8 +49,11 @@
     border: 1px solid #e4dccd;
   }
 
-  .prose pre {
+  .prose .code-wrap {
     position: relative;
+  }
+
+  .prose pre {
     border: 2px solid var(--ink);
     padding: 18px 20px;
     overflow-x: auto;
@@ -58,7 +61,7 @@
     box-shadow: 4px 4px 0 var(--ink);
   }
 
-  .prose pre .copy-btn {
+  .prose .code-wrap .copy-btn {
     position: absolute;
     top: 8px;
     right: 8px;
@@ -79,21 +82,21 @@
       border-color 0.12s;
   }
 
-  .prose pre .copy-btn svg {
+  .prose .code-wrap .copy-btn svg {
     display: block;
   }
 
-  .prose pre:hover .copy-btn,
-  .prose pre .copy-btn:focus-visible {
+  .prose .code-wrap:hover .copy-btn,
+  .prose .code-wrap .copy-btn:focus-visible {
     opacity: 1;
   }
 
-  .prose pre .copy-btn:hover {
+  .prose .code-wrap .copy-btn:hover {
     background: var(--accent);
     border-color: var(--accent);
   }
 
-  .prose pre .copy-btn.done {
+  .prose .code-wrap .copy-btn.done {
     background: var(--accent);
     border-color: var(--accent);
     opacity: 1;
@@ -101,7 +104,7 @@
 
   /* touch devices: no hover, so keep the button visible */
   @media (hover: none) {
-    .prose pre .copy-btn {
+    .prose .code-wrap .copy-btn {
       opacity: 1;
     }
   }
